@@ -1,0 +1,66 @@
+#include<iostream>
+#include<glad/glad.h>
+#include<GLFW/glfw3.h>
+
+const int WIDTH = 800;
+const int HEIGHT = 800;
+const char* TITLE = "OpenGLCourse";
+
+int main(int argc, char** argv) {
+
+	// Initialize GLFW, but exit if GLFW fails to initialize
+	if (!glfwInit()) {
+		std::cout << "Unable to initialize GLFW. Exiting..." << std::endl;
+		return 1;
+	}
+
+	// Tell GLFW what version of OpenGL is being used.
+	// We're using 3.3
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+
+	// Indicate to GLFW that we're using the CORE OpenGL profile,
+	// So we're only using the modern OpenGL functions
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+	// Create the window and push it's ptr to the stack
+	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, TITLE, NULL, NULL);
+
+	// If the window couldn't be malloc'd, exit
+	if (window == NULL) {
+		std::cout << "Failed to create GLFW window. Exiting..." << std::endl;
+		return 1;
+	}
+
+	//Tell OpenGL to work within our new window we created
+	glfwMakeContextCurrent(window);
+
+	// Load GLAD
+	gladLoadGL();
+
+	//Specify the graphics viewport to render within the window
+	glViewport(0, 0, WIDTH, HEIGHT);
+
+	// Set the background color to a navy blue
+	glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
+	
+	//Clean the back buffer and actually display the new color
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	//Swap the back buffer with the front buffer (think BufferStrategy in java)
+	glfwSwapBuffers(window);
+
+	// Main game loop
+	while (!glfwWindowShouldClose(window)) {
+		
+		//Poll for window events (window buttons clicked, window resized, etc.)
+		glfwPollEvents();
+	}
+
+	//Delete window from memory manually (since there's no garbage collector in C++)
+	glfwDestroyWindow(window);
+
+	//and end GLFW operations before function returns 
+	glfwTerminate();
+	return 0;
+}
